@@ -6,7 +6,7 @@
       "baseUrlType": "workday-staffing",
       "url": "workers",
       "authType": "sso",
-      "deferred": true
+      "_deferred": true
     }
   ],
   "outboundData": {
@@ -14,18 +14,14 @@
       {
         "name": "workerUpdate",
         "baseUrlType": "app",
-        "url": "/workers/{ID}/businessTitleChanges",
+        "url": "/workers/<% 'me' %>/businessTitleChanges",
         "httpMethod": "POST",
         "authType": "sso",
         "_onSend": "<%  %>",
-        "values": [
+        "_values": [
           {
-            "outboundPath": "createdBy.id",
-            "value": "<% me.id %>"
-          },
-          {
-            "outboundPath": "image.id",
-            "value": "<% (!empty(createAnEventImage.id)) ? createAnEventImage.id : null %>"
+            "_outboundPath": "image.id",
+            "_value": "<% (!empty(createAnEventImage.id)) ? createAnEventImage.id : null %>"
           }
         ]
       }
@@ -90,21 +86,26 @@
                   "label": "Worker",
                   "values": "<% workers.data %>",
                   "multiSelect": false,
-                  "onChange": "<% populate(self.value); %>"
+                  "_onChange": "<% populate(self.value); %>"
                 },
                 {
                   "type": "section",
                   "horizontal": true,
                   "children": [
                     {
-                      "type": "button",
-                      "id": "filter",
-                      "label": "FILTER",
-                      "taskReference": {
-                        "type": "taskReference",
-                        "taskId": "root"
-                      },
-                      "action": "AUXILIARY"
+                      "type": "section",
+                      "children": [
+                        {
+                          "type": "button",
+                          "id": "filter",
+                          "label": "FILTER",
+                          "taskReference": {
+                            "type": "taskReference",
+                            "taskId": "root"
+                          },
+                          "action": "AUXILIARY"
+                        }
+                      ]
                     }
                   ]
                 },
@@ -112,7 +113,7 @@
                   "type": "grid",
                   "id": "dataGrid",
                   "gridType": "LIST",
-                  "rows": "<% [] %>",
+                  "rows": "<% workers.data %>",
                   "rowVariableName": "row",
                   "doNotAdd": "true",
                   "doNotRemoveRow": "true",
@@ -124,7 +125,7 @@
                       "label": "Employee ID",
                       "cellTemplate": {
                         "type": "text",
-                        "value": "<% row.column1 %>"
+                        "value": "<% row.id %>"
                       }
                     },
                     {
