@@ -3,8 +3,14 @@
   "endPoints": [
     {
       "name": "workers",
+      "baseUrlType": "workday-staffing",
+      "url": "workers",
+      "authType": "sso"
+    },
+    {
+      "name": "workersInfo",
       "baseUrlType": "wql",
-      "url": "data?query=SELECT%20worker%2C%20firstName%2C%20lastName%20FROM%20allWorkers",
+      "url": "data?query=SELECT%20worker%2C%20firstName%2C%20lastName%0AFROM%20allWorkers",
       "authType": "sso",
       "_deferred": true
     }
@@ -64,27 +70,11 @@
               "id": "fieldSetContainer",
               "children": [
                 {
-                   "type": "dropdown",
-                   "selectedValues": "<% ['worker'] %>",
-                   "label": "fil",
-                   "id": "dropdownList",
-                   "instanceList": [
-                     {
-                       "id": "Special Leave",
-                       "descriptor": "Special Leave"
-                     },
-                     {
-                       "id": "Special Leave - Domestic",
-                       "descriptor": "Special Leave - Domestic"
-                     }
-                   ],
-                   "required": "true"
-                 },
-                {
                   "type": "instanceList",
                   "id": "instanceListWorkerSearch",
                   "label": "Worker",
-                  "values": "<% workers.data %>",
+                  "values": "<%
+                             [] %>",
                   "multiSelect": false,
                   "_onChange": "<% populate(self.value); %>"
                 },
@@ -113,11 +103,12 @@
                   "type": "grid",
                   "id": "dataGrid",
                   "gridType": "LIST",
-                  "rows": "<% workers.data %>",
+                  "rows": "<% workersInfo.data %>",
                   "rowVariableName": "row",
-                  "doNotAdd": "true",
-                  "doNotRemoveRow": "true",
+                  "_doNotAdd": "true",
+                  "_doNotRemoveRow": "true",
                   "enabled": true,
+                  "selectionEnabled": true,
                   "columns": [
                     {
                       "type": "column",
@@ -143,7 +134,7 @@
                       "label": "Last Name",
                       "cellTemplate": {
                         "type": "text",
-                        "value": "<% [] %>"
+                        "value": "<% row.lastName %>"
                       }
                     },
                     {
@@ -152,7 +143,7 @@
                       "label": "Business Title",
                       "cellTemplate": {
                         "type": "text",
-                        "value": "<% row.column4 %>"
+                        "value": "<% [] %>"
                       }
                     }
                   ]
